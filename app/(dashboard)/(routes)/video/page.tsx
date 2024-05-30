@@ -1,113 +1,78 @@
 "use client";
-import * as z from "zod";
-import toast from "react-hot-toast";
 import { VideoIcon } from "lucide-react";
-import Heading from "@/components/Heading";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { formSchema } from "./constants";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Empty from "@/components/Empty";
-import Loader from "@/components/Loader";
-import { useProModal } from "@/hooks/useProModal";
+import { Heading } from "@/components/heading";
+import Link from "next/link";
+import Image from "next/image";
+
+const videoTools = [
+  {
+    title: "Generate Video",
+    nameOne: "Generate",
+    nameTwo: "Video",
+    description: "Simple prompt to video generator",
+    href: "/video/generate",
+    src: "/video-generate-thumbnail.gif",
+  },
+  {
+    title: "Extract Foreground",
+    nameOne: "Extract",
+    nameTwo: "Foreground",
+    description: "Make green screens",
+    href: "/video/foreground",
+    src: "/video-foreground-thumbnail.gif",
+  },
+  {
+    title: "Add Caption",
+    nameOne: "Add",
+    nameTwo: "Caption",
+    description: "Automatically add captions",
+    href: "/video/caption",
+    src: "/video-caption-thumbnail.gif",
+  },
+];
 
 const VideoPage = () => {
-  const proModal = useProModal();
-  const router = useRouter();
-
-  const [video, setVideo] = useState<string>();
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      prompt: "",
-    },
-  });
-
-  const isLoading = form.formState.isSubmitting;
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    try {
-      setVideo(undefined);
-
-      const response = await axios.post("/api/video", values);
-
-      setVideo(response.data[0]);
-
-      form.reset();
-    } catch (error: any) {
-      if (error?.response?.status === 403) {
-        proModal.onOpen();
-      } else {
-        toast.error("Something went wrong");
-      }
-    } finally {
-      router.refresh();
-    }
-  };
-
   return (
     <div>
       <Heading
-        title="Video Generation"
-        description="Videos and stuff"
+        title="Video Tools"
+        description=""
         icon={VideoIcon}
         iconColor="text-orange-600"
         bgColor="bg-orange-600/10"
       />
       <div className="px-4 lg:px-8">
-        <div>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {videoTools.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="flex items-center justify-between gap-x-2 border hover:option-hover"
             >
-              <FormField
-                name="prompt"
-                render={({ field }) => (
-                  <FormItem className="col-span-12 lg:col-span-10">
-                    <FormControl className="m-0 p-0">
-                      <Input
-                        className="border-0 outline-none focus-visible ring-0 focus-visible:ring-transparent"
-                        disabled={isLoading}
-                        placeholder="Clown fish swimming around a coral reef"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                className="col-span-12 lg:col-span-2 w-full"
-                disabled={isLoading}
-              >
-                Generate
-              </Button>
-            </form>
-          </Form>
-        </div>
-        <div className="space-y-4 mt-4">
-          {isLoading && (
-            <div className="p-8 w-full flex items-center justify-center bg-muted rounded-lg">
-              <Loader />
-            </div>
-          )}
-          {!video && !isLoading && <Empty label="No video generated" />}
-          {video && (
-            <video
-              className="w-full aspect-video mt-8 rounded-lg border bg-black"
-              controls
-            >
-              <source src={video} />
-            </video>
-          )}
+              <div className="ml-4">
+                <h2 className="text-4xl font-title font-bold">
+                  {item.nameOne}
+                </h2>
+                <h3 className="text-2xl font-title font-bold">
+                  {item.nameTwo}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {item.description}
+                </p>
+              </div>
+              <div className="relative w-40 h-40 object-cover">
+                <Image
+                  src={item.src}
+                  alt="Tool preview"
+                  fill
+                  className="object-cover"
+                />
+                {/* <video className="object-fit" autoPlay loop muted>
+                  <source src={item.src} />
+                </video> */}
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

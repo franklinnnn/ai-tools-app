@@ -1,12 +1,3 @@
-import * as z from "zod";
-
-export const formSchema = z.object({
-  prompt: z.string().min(1, {
-    message: "Image prompt is required",
-  }),
-  amount: z.string().min(1),
-  resolution: z.string().min(1),
-});
 
 export const amountOptions = [
   {
@@ -45,3 +36,31 @@ export const resolutionOptions = [
     label: "1024x1024",
   },
 ];
+
+
+export const imageTools = [
+  {
+    title: "Generate Images",
+    description: "Simple prompt to image generator",
+    href: "/image/generate",
+    img: "/empty.png"
+  },
+  {
+    title: "Remove Backgrounds",
+    description: "Erase backgrounds, very clean",
+    href: "/image/background",
+    img: "/image-background-removed.png"
+  },
+  {
+    title: "Upscale Images",
+    description: "Make it look better",
+    href: "/image/upscale",
+    img: "/image-upscale-output.png"
+  },
+  // {
+  //   title: "Create Logos",
+  //   description: "Simple prompt to image generator",
+  //   href: "/generate",
+  //   img: ""
+  // },
+]

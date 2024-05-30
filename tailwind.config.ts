@@ -17,6 +17,10 @@ const config = {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      'title': ['Panchang', 'sans-serif'],
+      'body': ['Supreme', 'sans-serif'],
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -72,6 +76,9 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      dropShadow: {
+        'extrude': [ '-1px 1px 0 rgba(0, 0, 0, 1)','-2px 2px 0 rgba(0, 0, 0, 1)','-3px 3px 0 rgba(0, 0, 0, 1)']
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

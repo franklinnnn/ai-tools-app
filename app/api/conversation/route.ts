@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { increaseApiLimit, checkApiLimit } from "@/lib/apiLimit";
 import { checkSubscription } from "@/lib/subscription";
+import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 
 // const configuration = new Configuration({
@@ -12,6 +13,12 @@ import { checkSubscription } from "@/lib/subscription";
 const openai = new OpenAI({
   apiKey: process.env.OPENAIA_API_KEY,
 });
+
+const instructionMessage: ChatCompletionMessageParam = {
+  role: "system",
+  content:
+    "You are a chatbot. When you asked to generate or asked about code, you must answer only in markdown code snippets, except for your explanation of the code, and always provide explanations for your code. However, you may also assist with queries that are not code-related.",
+};
 
 export async function POST(req: Request) {
   try {
@@ -41,7 +48,7 @@ export async function POST(req: Request) {
 
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages,
+      messages: [instructionMessage, ...messages],
     });
 
     if(isPro) {

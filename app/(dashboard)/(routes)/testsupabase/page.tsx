@@ -9,7 +9,7 @@ import { formSchema } from "../code/constants";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Empty from "@/components/Empty";
+import { Empty } from "@/components/empty";
 import { auth } from "@clerk/nextjs";
 import { increaseApiLimit, checkApiLimit } from "@/lib/apiLimit";
 

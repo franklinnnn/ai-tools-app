@@ -1,4 +1,4 @@
-import { auth} from '@clerk/nextjs' 
+import { auth } from '@clerk/nextjs' 
 import supabase from "@/lib/supabaseClient";
 import { MAX_FREE_COUNTS } from '@/constants';
 
@@ -8,13 +8,13 @@ export const increaseApiLimit = async () => {
         return
     }
 
-    const { data, error } = await supabase
+    const { data: userApiLimit, error } = await supabase
       .from("user-api-limit")
       .select("*")
-      .eq("user_id", userId);
-    console.log(data);
+      .eq("user_id", userId)
+      .single()
 
-    const userApiLimit = data?.find((user) => user.user_id === userId);
+    // const userApiLimit = data?.find((user) => user.user_id === userId);
     console.log(userApiLimit);
 
     if(userApiLimit) {
@@ -23,7 +23,7 @@ export const increaseApiLimit = async () => {
             .update({count: userApiLimit.count + 1})
             .eq('user_id', userId)
     } else {
-        const {data, error } = await supabase
+        await supabase
             .from('user-api-limit')
             .insert({
                 user_id: userId,
@@ -33,41 +33,53 @@ export const increaseApiLimit = async () => {
 }
 
 export const checkApiLimit = async () => {
-    const { userId} = auth()
+    const { userId } = auth()
+
     if(!userId) {
         return false;
     }
-    const { data, error } = await supabase
+
+    const { data: userApiLimit, error } = await supabase
       .from("user-api-limit")
       .select("*")
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .single()
 
-      const userApiLimit = data?.find((user) => user.user_id === userId);
+    // const userApiLimit = data?.find((user) => user.user_id === userId);
 
-      if(!userApiLimit || userApiLimit.count < MAX_FREE_COUNTS) {
-        return true
-      } else {
-        return false
-      }
+    if(!userApiLimit || userApiLimit.count < MAX_FREE_COUNTS) {
+      return true
+    } else {
+      return false
+    }
     
 }
 
 export const getApiLimitCount = async () => {
-  const {userId} = auth()
+  const { userId } = auth()
+
   if(!userId) {
     return 0;
   }
 
-  const { data, error} = await supabase
+  const { data: userApiLimit, error} = await supabase
     .from('user-api-limit')
     .select("*")
-    .eq("user_id", userId);
+    .eq("user_id", userId)
+    .single()
 
-    const userApiLimit = data?.find((user) => user.user_id === userId);
+    // const userApiLimit = data?.find((user) => user.user_id === userId);
 
-    if(!userApiLimit) {
-      return 0;
-    }
+  if(!userApiLimit) {
+    await supabase
+      .from('user-api-limit')
+      .insert({
+        user_id: userId,
+        count: 1
+    })
+  } else {
+    return userApiLimit.count
+  }
 
-    return userApiLimit.count;
+  return userApiLimit.count;
 }

@@ -1,8 +1,6 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { UserButton } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   ImageIcon,
@@ -10,7 +8,8 @@ import {
   Music,
   Video,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
 
 const tools = [
   {
@@ -21,33 +20,33 @@ const tools = [
     href: "/conversation",
   },
   {
-    label: "Image Generation",
+    label: "Image Tools",
     icon: ImageIcon,
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
     href: "/image",
   },
   {
-    label: "Video Generation",
+    label: "Video Tools",
     icon: Video,
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
     href: "/video",
   },
-  {
-    label: "Music Generation",
-    icon: Music,
-    color: "text-sky-500",
-    bgColor: "bg-sky-500/10",
-    href: "/music",
-  },
-  {
-    label: "Code Generation",
-    icon: MessageSquare,
-    color: "text-green-500",
-    bgColor: "bg-green-500/10",
-    href: "/code",
-  },
+  // {
+  //   label: "Music Generation",
+  //   icon: Music,
+  //   color: "text-sky-500",
+  //   bgColor: "bg-sky-500/10",
+  //   href: "/music",
+  // },
+  // {
+  //   label: "Code Generation",
+  //   icon: MessageSquare,
+  //   color: "text-green-500",
+  //   bgColor: "bg-green-500/10",
+  //   href: "/code",
+  // },
 ];
 
 const DashboardPage = () => {
@@ -56,12 +55,12 @@ const DashboardPage = () => {
   return (
     <div>
       <div className="mb-8 space-y-4 text-center">
-        <h2 className="text-2xl md:text-4xl font-bold">
-          Explore the power of THE EGGHEAD ARTIFICIAL INTELLIGENCE GAAAAAAAAAA
+        <h2 className="text-4xl md:text-7xl font-title font-bold">
+          Welcome to Egghead
         </h2>
 
         <p className="text-muted-foreground font-light text-sm md:text-lg">
-          Chat with the smartest AI - Experience THE POWER of AY EYE
+          Make robots do it for you{" "}
         </p>
       </div>
       <div className="px-4 md:px-20 lg:px-32 space-y-4">
@@ -75,7 +74,7 @@ const DashboardPage = () => {
               <div className={cn("p-2 w-fit rounded-md", tool.bgColor)}>
                 <tool.icon className={cn("w-8 h-8", tool.color)} />
               </div>
-              <div className="font-semibold">{tool.label}</div>
+              <div className=" font-bold">{tool.label}</div>
             </div>
             <ArrowRight className="w-5 h-5" />
           </Card>

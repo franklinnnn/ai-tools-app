@@ -1,0 +1,382 @@
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import Image from "next/image";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { Download, DownloadIcon, ImageIcon, Upload, X } from "lucide-react";
+import { formSchema, fileSchema } from "./constants";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+import { useProModal } from "@/hooks/useProModal";
+import { Heading } from "@/components/heading";
+import { supabase } from "@/lib/supabaseClient";
+import { useAuth } from "@clerk/nextjs";
+import { v4 as uuidv4 } from "uuid";
+import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardFooter } from "@/components/ui/card";
+
+const UpscaleImagePage = () => {
+  const { userId, getToken } = useAuth();
+  const proModal = useProModal();
+  const router = useRouter();
+  const [preview, setPreview] = useState();
+  const [images, setImages] = useState<string[]>([]);
+
+  const [showUpload, setShowUpload] = useState(false);
+  const [inputImage, setInputImage] = useState<string>();
+  const [outputImage, setOutputImage] = useState<string>();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      url: "",
+      scale: 4,
+      enhance: false,
+    },
+  });
+
+  const fileForm = useForm<z.infer<typeof fileSchema>>({
+    resolver: zodResolver(fileSchema),
+    defaultValues: {
+      scale: 4,
+      enhance: false,
+    },
+  });
+
+  const isLoading =
+    form.formState.isSubmitting || fileForm.formState.isSubmitting;
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      console.log(values);
+      setInputImage(undefined);
+      setOutputImage(undefined);
+
+      console.log("HAVE URL");
+      setInputImage(values.url);
+      const response = await axios.post("/api/image/upscale", values);
+      setOutputImage(response.data);
+
+      form.reset();
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      router.refresh();
+    }
+  };
+
+  const onSubmitFile = async (values: z.infer<typeof fileSchema>) => {
+    let file = values.file;
+    console.log(file);
+    try {
+      if (file) {
+        setInputImage(undefined);
+        setOutputImage(undefined);
+        setInputImage(URL.createObjectURL(file));
+        const { data: fileUpload, error } = await supabase.storage
+          .from("uploads")
+          .upload(`images/${uuidv4()}.jpg`, file, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        const inputImageUrl = `https://udmmamkjicrltdpdtcrt.supabase.co/storage/v1/object/public/uploads/${fileUpload?.path}`;
+        const inputValues = {
+          url: inputImageUrl,
+          scale: values.scale,
+          enhance: values.enhance,
+        };
+
+        const response = await axios.post("/api/image/upscale", inputValues);
+        setOutputImage(response.data);
+
+        form.reset();
+      }
+      return 0;
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      router.refresh();
+    }
+  };
+
+  const resetForm = () => {
+    setInputImage(undefined);
+    setOutputImage(undefined);
+    form.reset();
+    fileForm.reset();
+    router.refresh();
+  };
+
+  return (
+    <div>
+      <Heading
+        title="Upscale Image"
+        description="Make it look better"
+        icon={ImageIcon}
+        iconColor="text-pink-600"
+        bgColor="bg-pink-600/10"
+      />
+      <div className="px-4 lg:px-8">
+        {!inputImage && !outputImage && (
+          <div className="grid grid-cols-2 lg:grid-cols-12 gap-2 my-4">
+            <div className="relative aspect-square col-span-6 xl:col-span-4">
+              <Image
+                alt="Sample image"
+                fill
+                src="/image-upscale-input.png"
+                className="object-cover"
+              />
+            </div>
+
+            <div className="relative aspect-square col-span-6 xl:col-span-4 bg-muted">
+              <Image
+                alt="Sample image"
+                fill
+                src="/image-upscale-output.png"
+                className="object-cover"
+              />
+            </div>
+          </div>
+        )}
+        <div>
+          {!showUpload && (
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex flex-col border w-full p-4 px-3 md:px-6 focus-within:border-black focus-within:shadow-sm focus-within:input-visible gap-2"
+              >
+                <div className="flex justify-between items-center gap-x-2">
+                  <FormField
+                    name="url"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormControl className="m-0 p-0">
+                          <Input
+                            className="flex items-center border-transparent outline-none focus-visible ring-0 focus-visible:ring-transparent focus-visible:border-b-black rounded-none"
+                            disabled={isLoading}
+                            type="url"
+                            placeholder="Enter a URL or upload from your system"
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <div
+                    onClick={() => setShowUpload(true)}
+                    className="flex items-center justify-center w-8 h-8 hover:bg-black hover:text-white transition hover:cursor-pointer"
+                  >
+                    <Upload />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-12 items-center gap-x-2">
+                  <FormField
+                    name="scale"
+                    render={({ field }) => (
+                      <FormItem className="grid col-span-6 gap-x-4">
+                        <div className="col-span-6 items-center my-4">
+                          <FormLabel className="text-xs text-muted-foreground">
+                            Image scale factor{" "}
+                            <span className="text-base mx-1">
+                              {field.value}
+                            </span>{" "}
+                            (min 1, max 10)
+                          </FormLabel>
+                          <FormControl>
+                            <Slider
+                              className="col-span-8 items-center py-2"
+                              defaultValue={[field.value]}
+                              max={10}
+                              step={1}
+                              onValueChange={(value) =>
+                                field.onChange(value[0])
+                              }
+                              disabled={isLoading}
+                            />
+                          </FormControl>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <Button
+                    className="col-span-6"
+                    type="submit"
+                    disabled={isLoading}
+                  >
+                    Generate
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          )}
+
+          {showUpload && (
+            <Form {...fileForm}>
+              <form
+                onSubmit={fileForm.handleSubmit(onSubmitFile)}
+                className="flex flex-col border w-full p-4 px-3 md:px-6 focus-within:border-black focus-within:shadow-sm gap-2 focus-within:input-visible"
+              >
+                <div className="flex justify-between items-center gap-x-2">
+                  <FormField
+                    control={fileForm.control}
+                    name="file"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormControl>
+                          <Input
+                            className="flex items-center border border-dashed outline-none focus-visible ring-0 focus-visible:ring-transparent bg-black/5 focus:border-black rounded-none"
+                            disabled={isLoading}
+                            type="file"
+                            accept=".jpg, .png"
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.files ? e.target.files[0] : null
+                              )
+                            }
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <div
+                    onClick={() => setShowUpload(false)}
+                    className="flex items-center justify-center w-8 h-8 hover:bg-black hover:text-white transition hover:cursor-pointer"
+                  >
+                    <X />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-12 items-center gap-x-2">
+                  <FormField
+                    name="scale"
+                    render={({ field }) => (
+                      <FormItem className="grid col-span-6 gap-x-4">
+                        <div className="col-span-6 items-center my-4">
+                          <FormLabel className="text-xs text-muted-foreground">
+                            Image scale factor{" "}
+                            <span className="text-base mx-1">
+                              {field.value}
+                            </span>{" "}
+                            (min 1, max 10)
+                          </FormLabel>
+                          <FormControl>
+                            <Slider
+                              className="col-span-8 items-center py-2"
+                              defaultValue={[field.value]}
+                              max={10}
+                              step={1}
+                              onValueChange={(value) =>
+                                field.onChange(value[0])
+                              }
+                              disabled={isLoading}
+                            />
+                          </FormControl>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <Button
+                    className="col-span-6"
+                    type="submit"
+                    disabled={isLoading}
+                  >
+                    Generate
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          )}
+        </div>
+        <div className="space-y-4 mt-4">
+          <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-4 justify-center items-center">
+            {inputImage && (
+              <div className="relative aspect-square rounded-lg">
+                <Image
+                  alt="Input image"
+                  fill
+                  src={inputImage}
+                  className="object-contain"
+                />
+              </div>
+            )}
+
+            {!outputImage && isLoading && (
+              <div className="h-full flex flex-col gap-y-4 items-center justify-center bg-muted rounded-lg">
+                <div className="w-10 h-10 relative animate-spin">
+                  <Image alt="Logo" fill src="/logo.png" />
+                </div>
+                <div className="text-center">
+                  <p>Working on your image</p>
+                  <p className="text-sm text-muted-foreground">
+                    Might take a minute if this is your first image
+                  </p>
+                </div>
+              </div>
+            )}
+            {outputImage && (
+              <Card key={outputImage} className="rounded-lg overflow-hidden">
+                <div className="relative aspect-square">
+                  <Image
+                    alt="Image"
+                    fill
+                    src={outputImage}
+                    className="object-contain"
+                  />
+                </div>
+                <CardFooter className="p-2">
+                  <Button
+                    onClick={() => window.open(outputImage)}
+                    variant="secondary"
+                    className="w-full"
+                  >
+                    <DownloadIcon className="h-4 w-2 mr-2" />
+                    Download
+                  </Button>
+                </CardFooter>
+              </Card>
+            )}
+          </div>
+          <div className="w-full pb-12">
+            {inputImage && outputImage && (
+              <Button
+                className="col-span-12 lg:col-span-4"
+                variant="outline"
+                onClick={resetForm}
+                disabled={isLoading}
+              >
+                Reset
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UpscaleImagePage;

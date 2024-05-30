@@ -1,20 +1,22 @@
 "use client";
-import * as z from "zod";
-import toast from "react-hot-toast";
-import { Music } from "lucide-react";
-import Heading from "@/components/Heading";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Music } from "lucide-react";
+import toast from "react-hot-toast";
+
 import { formSchema } from "./constants";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Empty from "@/components/Empty";
-import Loader from "@/components/Loader";
 import { useProModal } from "@/hooks/useProModal";
+import { Heading } from "@/components/heading";
+import { Loader } from "@/components/loader";
+import { Empty } from "@/components/empty";
 
 const MusicPage = () => {
   const proModal = useProModal();
