@@ -68,17 +68,17 @@ const ConversationPage = () => {
     <div>
       <Heading
         title="Conversation"
-        description="Smartest robot man"
+        description="Chat with the smartest robot man"
         icon={MessageSquare}
         iconColor="text-fuchsia-600"
         bgColor="bg-fuchsia-600/10"
       />
       <div className="px-4 lg:px-8">
-        <div>
+        <div className="border focus-within:border-black active:border-black">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
+              className=" w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
             >
               <FormField
                 name="prompt"
@@ -88,7 +88,7 @@ const ConversationPage = () => {
                       <Input
                         className="border-0 outline-none focus-visible ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
-                        placeholder="How much wood could a woodchuck chuck if a woodchuck could chuck wood?"
+                        placeholder="Chat"
                         {...field}
                       />
                     </FormControl>

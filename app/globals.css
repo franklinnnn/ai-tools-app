@@ -79,15 +79,19 @@ body,
   } */
 
   .option-hover {
-    @apply bg-black border-black text-white drop-shadow-extrude translate-x-2 -translate-y-2;
+    @apply bg-black border-black text-white drop-shadow-extrude translate-x-2 -translate-y-2 transition-transform;
   }
 
-  .input-visible {
+  .input-active {
     @apply border-black drop-shadow-extrude translate-x-2 -translate-y-2;
   }
 
   .form-input:placeholder-shown {
     @apply border-red-500 bg-blue-500;
+  }
+
+  .sidebar-active {
+    @apply bg-black text-white;
   }
 }
 

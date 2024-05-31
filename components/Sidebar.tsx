@@ -15,7 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import FreeCounter from "./free-counter";
-const robotoSlab = Roboto_Slab({ weight: "600", subsets: ["latin"] });
+// const robotoSlab = Roboto_Slab({ weight: "600", subsets: ["latin"] });
 
 const routes = [
   {
@@ -77,9 +77,7 @@ export const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
           <div className="relative w-8 h-8 mr-2">
             <Image fill alt="logo" src="/logo.png" />
           </div>
-          <h1 className={cn("text-2xl font-bold", robotoSlab.className)}>
-            Egghead
-          </h1>
+          <h1 className="text-2xl font-bold font-title">Egghead</h1>
         </Link>
         <div className="space-y-1">
           {routes.map((route) => (
@@ -87,9 +85,9 @@ export const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
               href={route.href}
               key={route.href}
               className={cn(
-                "text-sm group flex p-3 w-full justifystart font-medium cursor-pointer hover:text-black hover:bg-white/10 rounded-lg transition",
+                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer transition hover:sidebar-active",
                 pathname === route.href
-                  ? "text-black bg-white/10"
+                  ? "bg-black sidebar-active"
                   : "text-zinc-400"
               )}
             >

@@ -150,12 +150,12 @@ const RemoveBackgroundPage = () => {
             </div>
           </div>
         )}
-        <div>
+        <div className="border focus-within:border-black active:border-black">
           {!showUpload && (
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col border w-full p-4 px-3 md:px-6 focus-within:border-black focus-within:shadow-sm gap-2"
+                className="flex flex-col  w-full p-4 px-3 md:px-6 gap-2"
               >
                 <div className="flex justify-between items-center gap-x-2 bg-white">
                   <FormField
@@ -198,7 +198,7 @@ const RemoveBackgroundPage = () => {
             <Form {...fileForm}>
               <form
                 onSubmit={fileForm.handleSubmit(onSubmitFile)}
-                className="flex flex-col border w-full p-4 px-3 md:px-6 focus-within:border-black focus-within:shadow-sm gap-2"
+                className="flex flex-col  w-full p-4 px-3 md:px-6 gap-2"
               >
                 <div className="flex justify-between items-center gap-x-2 bg-white">
                   <FormField
@@ -208,7 +208,7 @@ const RemoveBackgroundPage = () => {
                       <FormItem className="w-full">
                         <FormControl>
                           <Input
-                            className="flex items-center border border-dashed outline-none focus-visible ring-0 focus-visible:ring-transparent bg-black/5 rounded-none"
+                            className="flex items-center border border-dashed outline-none focus-visible ring-0 focus-visible:ring-transparent bg-black/5 rounded-none file:bg-black file:text-white"
                             disabled={isLoading}
                             type="file"
                             accept=".jpg, .png"

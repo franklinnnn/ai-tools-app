@@ -83,39 +83,42 @@ const VideoForegroundPage = () => {
   };
 
   const onSubmitFile = async (values: z.infer<typeof fileSchema>) => {
-    try {
-      let file = values.file[0];
-      setInputVideo(undefined);
-      setOutputVideo(undefined);
-      setInputVideo(URL.createObjectURL(file));
-      const { data: fileUpload, error } = await supabase.storage
-        .from("uploads")
-        .upload(`videos/${uuidv4()}.mp4`, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
+    let file = values.file;
+    console.log(file);
+    // try {
+    //   if (file) {
+    //     setInputVideo(undefined);
+    //     setOutputVideo(undefined);
+    //     setInputVideo(URL.createObjectURL(file));
+    //     const { data: fileUpload } = await supabase.storage
+    //       .from("uploads")
+    //       .upload(`videos/${uuidv4()}.mp4`, file, {
+    //         cacheControl: "3600",
+    //         upsert: false,
+    //       });
 
-      const inputVideoUrl = `https://udmmamkjicrltdpdtcrt.supabase.co/storage/v1/object/public/uploads/${fileUpload?.path}`;
+    //     const inputVideoUrl = `https://udmmamkjicrltdpdtcrt.supabase.co/storage/v1/object/public/uploads/${fileUpload?.path}`;
 
-      const inputValues = {
-        url: inputVideoUrl,
-        mask: values.mask,
-      };
+    //     const inputValues = {
+    //       url: inputVideoUrl,
+    //       mask: values.mask,
+    //     };
 
-      const response = await axios.post("/api/video/foreground", inputValues);
+    //     const response = await axios.post("/api/video/foreground", inputValues);
 
-      setOutputVideo(response.data);
+    //     setOutputVideo(response.data);
 
-      form.reset();
-    } catch (error: any) {
-      if (error?.response?.status === 403) {
-        proModal.onOpen();
-      } else {
-        toast.error("Something went wrong");
-      }
-    } finally {
-      router.refresh();
-    }
+    //     form.reset();
+    //   }
+    // } catch (error: any) {
+    //   if (error?.response?.status === 403) {
+    //     proModal.onOpen();
+    //   } else {
+    //     toast.error("Something went wrong");
+    //   }
+    // } finally {
+    //   router.refresh();
+    // }
   };
 
   return (
@@ -227,7 +230,7 @@ const VideoForegroundPage = () => {
           {showUpload && (
             <Form {...fileForm}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(onSubmitFile)}
                 className="flex flex-col border w-full p-4 px-3 md:px-6 focus-within:shadow-sm gap-2"
               >
                 <div className="flex justify-between items-center gap-x-2">
@@ -238,11 +241,15 @@ const VideoForegroundPage = () => {
                       <FormItem className="w-full">
                         <FormControl>
                           <Input
-                            className="flex items-center border border-dashed outline-none focus-visible ring-0 focus-visible:ring-transparent focus:border-black rounded-none file:bg-red-500"
+                            className="flex items-center border border-dashed outline-none focus-visible ring-0 focus-visible:ring-transparent bg-black/5 focus:border-black rounded-none"
                             disabled={isLoading}
                             type="file"
-                            placeholder="Your video"
-                            {...fileRef}
+                            accept=".mp4"
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.files ? e.target.files[0] : null
+                              )
+                            }
                           />
                         </FormControl>
                       </FormItem>

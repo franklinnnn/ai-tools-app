@@ -47,7 +47,7 @@ const VideoPage = () => {
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center justify-between gap-x-2 border hover:option-hover"
+              className="flex items-center justify-between gap-x-2 border hover:option-hover active:option-hover"
             >
               <div className="ml-4">
                 <h2 className="text-4xl font-title font-bold">

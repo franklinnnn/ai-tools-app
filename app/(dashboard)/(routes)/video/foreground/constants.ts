@@ -10,11 +10,11 @@ export const formSchema = z.object({
 
 export const fileSchema = z.object({
   file: z
-    .any()
-    .optional()
-    .refine((file) => file[0]?.size <= MAX_FILE_SIZE, 'Max file is 5MB.')
-    .refine((file) => ACCEPTED_FILE_TYPES.includes(file[0]?.type), 'Must be a video file'),
-  mask: z.string().min(1)
+    .instanceof(File)
+    .refine((file) => file?.size <= MAX_FILE_SIZE, 'Max file is 5MB.')
+    // .refine((file) => ACCEPTED_FILE_TYPES.includes(file[0]?.type), 'Must be a video file')
+    .optional(),
+    mask: z.string().min(1)
 })
 
 export const maskOptions = [ 

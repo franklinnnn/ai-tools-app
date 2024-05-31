@@ -75,11 +75,11 @@ const VideoPage = () => {
         >
           <source src="/video-generate.mp4" />
         </video>
-        <div>
+        <div className="border focus-within:border-black active:border-black">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="border w-full p-4 px-3 md:px-6 focus-within:shadow-sm focus-within:border-black grid grid-cols-12 gap-2 transition"
+              className=" w-full p-4 px-3 md:px-6 grid grid-cols-12 gap-2 transition"
             >
               <FormField
                 name="prompt"

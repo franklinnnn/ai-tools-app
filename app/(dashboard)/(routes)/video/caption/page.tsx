@@ -224,23 +224,23 @@ const VideoCaptionPage = () => {
             </Card>
           )}
         </div>
-        <div>
+        <div className="border focus-within:border-black active:border-black">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm gap-2"
+              className="flex flex-col w-full p-4 px-3 md:px-6 gap-2"
             >
               <FormField
                 control={form.control}
                 name="video"
                 render={({ field }) => (
-                  <FormItem className="w-full border hover:border-black px-2">
+                  <FormItem className="w-full  hover:border-black px-2">
                     <FormLabel className="text-sm text-muted-foreground">
                       Video file
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="flex items-center border-0 outline-none focus-visible ring-0 focus-visible:ring-transparent"
+                        className="flex items-center border border-dashed outline-none focus-visible ring-0 focus-visible:ring-transparent bg-black/5 focus:border-black rounded-none file:bg-black file:text-white"
                         disabled={isLoading}
                         type="file"
                         accept=".mp4"
@@ -259,13 +259,13 @@ const VideoCaptionPage = () => {
                 control={form.control}
                 name="transcript"
                 render={({ field }) => (
-                  <FormItem className="w-full border hover:border-black px-2">
+                  <FormItem className="w-full hover:border-black px-2">
                     <FormLabel className="text-sm text-muted-foreground">
                       Transcript file
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="flex items-center border-0 outline-none focus-visible ring-0 focus-visible:ring-transparent"
+                        className="flex items-center border border-dashed outline-none focus-visible ring-0 focus-visible:ring-transparent bg-black/5 focus:border-black rounded-none file:bg-black file:text-white"
                         disabled={isLoading}
                         type="file"
                         accept=".json"
@@ -282,18 +282,18 @@ const VideoCaptionPage = () => {
                   </FormItem>
                 )}
               />
-              <div className="flex gap-x-2">
+              <div className="flex gap-x-2 mt-4">
                 <FormField
                   control={form.control}
                   name="color"
                   render={({ field }) => (
-                    <FormItem className="w-full border hover:border-black px-2">
+                    <FormItem className="w-full">
                       <FormLabel className="text-sm text-muted-foreground">
                         Color
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className="border-0 outline-none focus-visible ring-0 focus-visible:ring-transparent"
+                          className="border-b outline-none rounded-none focus-visible ring-0 focus-visible:ring-transparent focus-visible:border-black"
                           disabled={isLoading}
                           {...field}
                         />
@@ -306,13 +306,13 @@ const VideoCaptionPage = () => {
                   control={form.control}
                   name="highlight_color"
                   render={({ field }) => (
-                    <FormItem className="w-full border hover:border-black px-2">
+                    <FormItem className="w-full">
                       <FormLabel className="text-sm text-muted-foreground">
                         Highlight color
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className="border-0 outline-none focus-visible ring-0 focus-visible:ring-transparent"
+                          className="border-b outline-none rounded-none focus-visible ring-0 focus-visible:ring-transparent focus-visible:border-black"
                           disabled={isLoading}
                           {...field}
                         />
@@ -325,7 +325,7 @@ const VideoCaptionPage = () => {
                 control={form.control}
                 name="font"
                 render={({ field }) => (
-                  <FormItem className="w-full border hover:border-black px-2 pb-2">
+                  <FormItem className="w-full">
                     <FormLabel className="text-sm text-muted-foreground">
                       Font
                     </FormLabel>
@@ -336,16 +336,17 @@ const VideoCaptionPage = () => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="rounded-none">
                           <SelectValue defaultValue={field.value} />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="rounded-none">
                         {fontOptions.map((option) => (
                           <SelectItem
                             key={option.value}
                             value={option.value}
                             style={option.style}
+                            className="rounded-none"
                           >
                             {option.label}
                           </SelectItem>
@@ -360,7 +361,7 @@ const VideoCaptionPage = () => {
                 control={form.control}
                 name="subs_position"
                 render={({ field }) => (
-                  <FormItem className="w-full border hover:border-black px-2 pb-2">
+                  <FormItem className="w-full">
                     <FormLabel className="text-sm text-muted-foreground">
                       Caption position
                     </FormLabel>
@@ -371,13 +372,17 @@ const VideoCaptionPage = () => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="rounded-none">
                           <SelectValue defaultValue={field.value} />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="rounded-none">
                         {subsPositionOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
+                          <SelectItem
+                            key={option.value}
+                            value={option.value}
+                            className="rounded-none"
+                          >
                             {option.label}
                           </SelectItem>
                         ))}
@@ -387,7 +392,7 @@ const VideoCaptionPage = () => {
                 )}
               />
               <Button
-                className="col-span-12 lg:col-span-2"
+                className="col-span-12 lg:col-span-2 mt-4"
                 type="submit"
                 disabled={isLoading}
               >
@@ -395,7 +400,11 @@ const VideoCaptionPage = () => {
               </Button>
             </form>
           </Form>
-          <Button onClick={resetForm} variant="outline">
+          <Button
+            onClick={resetForm}
+            variant="outline"
+            className="col-span-12 lg:col-span-2 mb-4"
+          >
             Reset
           </Button>
         </div>
