@@ -161,7 +161,7 @@ const UpscaleImagePage = () => {
             </div>
           </div>
         )}
-        <div className="border focus-within:border-black active:border-black">
+        <div className="border border-black">
           {!showUpload && (
             <Form {...form}>
               <form
@@ -188,8 +188,11 @@ const UpscaleImagePage = () => {
 
                   <div
                     onClick={() => setShowUpload(true)}
-                    className="flex items-center justify-center w-8 h-8 hover:bg-black hover:text-white transition hover:cursor-pointer"
+                    className="group relative flex items-center justify-center w-8 h-8 transition hover:cursor-pointer text-muted-foreground hover:text-black"
                   >
+                    <div className="absolute px-2 right-0 bottom-8 hidden group-hover:block bg-black text-white text-sm text-nowrap transition">
+                      Upload file
+                    </div>
                     <Upload />
                   </div>
                 </div>
@@ -265,7 +268,7 @@ const UpscaleImagePage = () => {
                   />
                   <div
                     onClick={() => setShowUpload(false)}
-                    className="flex items-center justify-center w-8 h-8 hover:bg-black hover:text-white transition hover:cursor-pointer"
+                    className="flex items-center justify-center w-8 h-8 transition hover:cursor-pointer text-muted-foreground hover:text-black"
                   >
                     <X />
                   </div>

@@ -224,7 +224,7 @@ const VideoCaptionPage = () => {
             </Card>
           )}
         </div>
-        <div className="border focus-within:border-black active:border-black">
+        <div className="border border-black">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -259,7 +259,7 @@ const VideoCaptionPage = () => {
                 control={form.control}
                 name="transcript"
                 render={({ field }) => (
-                  <FormItem className="w-full hover:border-black px-2">
+                  <FormItem className="w-full px-2">
                     <FormLabel className="text-sm text-muted-foreground">
                       Transcript file
                     </FormLabel>
@@ -276,7 +276,7 @@ const VideoCaptionPage = () => {
                         }
                       />
                     </FormControl>
-                    <FormLabel className="text-xs text-muted-foreground">
+                    <FormLabel className="text-xs text-muted-foreground ml-4">
                       Will be used for words if provided
                     </FormLabel>
                   </FormItem>
@@ -293,7 +293,7 @@ const VideoCaptionPage = () => {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className="border-b outline-none rounded-none focus-visible ring-0 focus-visible:ring-transparent focus-visible:border-black"
+                          className="border-black outline-none rounded-none focus-visible ring-0 focus-visible:ring-transparent"
                           disabled={isLoading}
                           {...field}
                         />
@@ -312,7 +312,7 @@ const VideoCaptionPage = () => {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className="border-b outline-none rounded-none focus-visible ring-0 focus-visible:ring-transparent focus-visible:border-black"
+                          className="border-black outline-none rounded-none focus-visible ring-0 focus-visible:ring-transparent"
                           disabled={isLoading}
                           {...field}
                         />
@@ -336,11 +336,11 @@ const VideoCaptionPage = () => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger className="rounded-none">
+                        <SelectTrigger className="rounded-none border-black">
                           <SelectValue defaultValue={field.value} />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="rounded-none">
+                      <SelectContent className="rounded-none border-black">
                         {fontOptions.map((option) => (
                           <SelectItem
                             key={option.value}
@@ -372,11 +372,11 @@ const VideoCaptionPage = () => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger className="rounded-none">
+                        <SelectTrigger className="rounded-none border-black">
                           <SelectValue defaultValue={field.value} />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="rounded-none">
+                      <SelectContent className="rounded-none border-black">
                         {subsPositionOptions.map((option) => (
                           <SelectItem
                             key={option.value}
@@ -391,22 +391,26 @@ const VideoCaptionPage = () => {
                   </FormItem>
                 )}
               />
-              <Button
-                className="col-span-12 lg:col-span-2 mt-4"
-                type="submit"
-                disabled={isLoading}
-              >
-                Generate
-              </Button>
+              <div className="grid grid-cols-12 mt-4 gap-x-4">
+                <Button
+                  onClick={resetForm}
+                  variant="secondary"
+                  className="col-span-6 lg:col-span-1"
+                  type="reset"
+                  disabled={isLoading}
+                >
+                  Reset
+                </Button>
+                <Button
+                  className="col-span-6 lg:col-span-1"
+                  type="submit"
+                  disabled={isLoading}
+                >
+                  Generate
+                </Button>
+              </div>
             </form>
           </Form>
-          <Button
-            onClick={resetForm}
-            variant="outline"
-            className="col-span-12 lg:col-span-2 mb-4"
-          >
-            Reset
-          </Button>
         </div>
       </div>
     </div>

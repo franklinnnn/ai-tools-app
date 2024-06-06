@@ -74,7 +74,7 @@ const ConversationPage = () => {
         bgColor="bg-fuchsia-600/10"
       />
       <div className="px-4 lg:px-8">
-        <div className="border focus-within:border-black active:border-black">
+        <div className="border border-black">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -100,7 +100,7 @@ const ConversationPage = () => {
                 className="col-span-12 lg:col-span-2 w-full"
                 disabled={isLoading}
               >
-                Generate
+                Hello
               </Button>
             </form>
           </Form>

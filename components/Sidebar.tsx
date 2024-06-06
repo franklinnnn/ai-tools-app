@@ -79,16 +79,14 @@ export const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
           </div>
           <h1 className="text-2xl font-bold font-title">Egghead</h1>
         </Link>
-        <div className="space-y-1">
+        <div className="space-y-1 overflow-none">
           {routes.map((route) => (
             <Link
               href={route.href}
               key={route.href}
               className={cn(
-                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer transition hover:sidebar-active",
-                pathname === route.href
-                  ? "bg-black sidebar-active"
-                  : "text-zinc-400"
+                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer transition overflow-none",
+                pathname === route.href ? "font-title" : "text-zinc-400"
               )}
             >
               <div className="flex items-center flex-1">

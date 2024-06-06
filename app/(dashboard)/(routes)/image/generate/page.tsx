@@ -80,7 +80,7 @@ const ImagePage = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="border w-full p-4 px-3 md:px-6 focus-within:shadow-sm focus-within:border-black grid grid-cols-12 gap-2 transition"
+              className="border border-black w-full p-4 px-3 md:px-6 grid grid-cols-12 gap-2 transition"
             >
               <FormField
                 name="prompt"
@@ -110,13 +110,17 @@ const ImagePage = () => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="rounded-none border-black">
                           <SelectValue defaultValue={field.value} />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="rounded-none border-black">
                         {amountOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
+                          <SelectItem
+                            key={option.value}
+                            value={option.value}
+                            className="rounded-none"
+                          >
                             {option.label}
                           </SelectItem>
                         ))}
@@ -138,13 +142,17 @@ const ImagePage = () => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="rounded-none border-black">
                           <SelectValue defaultValue={field.value} />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="rounded-none border-black">
                         {resolutionOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
+                          <SelectItem
+                            key={option.value}
+                            value={option.value}
+                            className="rounded-none border-black"
+                          >
                             {option.label}
                           </SelectItem>
                         ))}

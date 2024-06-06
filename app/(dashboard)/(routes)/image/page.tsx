@@ -49,7 +49,7 @@ const ImagePage = () => {
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center justify-between border gap-x-2 hover:option-hover"
+              className="flex items-center justify-between border  border-black gap-x-2 hover:option-hover"
             >
               <div className="ml-4">
                 <h2 className="text-4xl font-title font-bold">

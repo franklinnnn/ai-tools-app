@@ -75,7 +75,7 @@ const VideoPage = () => {
         >
           <source src="/video-generate.mp4" />
         </video>
-        <div className="border focus-within:border-black active:border-black">
+        <div className="border border-black">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -112,7 +112,7 @@ const VideoPage = () => {
               <Loader />
             </div>
           )}
-          {!video && !isLoading && <Empty label="No video generated" />}
+          {/* {!video && !isLoading && <Empty label="No video generated" />} */}
           {video && (
             <video
               className="w-full aspect-video mt-8 rounded-lg border bg-black"

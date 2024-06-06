@@ -151,12 +151,12 @@ const VideoForegroundPage = () => {
             </div>
           </div>
         )}
-        <div>
+        <div className="border border-black">
           {!showUpload && (
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col border w-full p-4 px-3 md:px-6 focus-within:shadow-sm gap-2 focus-within:border-black"
+                className="flex flex-col border w-full p-4 px-3 md:px-6 gap-2 "
               >
                 <div className="flex justify-between items-center gap-x-2">
                   {!showUpload && (
@@ -180,8 +180,11 @@ const VideoForegroundPage = () => {
 
                   <div
                     onClick={() => setShowUpload(true)}
-                    className="flex items-center justify-center w-8 h-8 hover:bg-black hover:text-white transition hover:cursor-pointer"
+                    className="group relative flex items-center justify-center w-8 h-8 transition hover:cursor-pointer text-muted-foreground hover:text-black"
                   >
+                    <div className="absolute px-2 right-0 bottom-8 hidden group-hover:block bg-black text-white text-sm text-nowrap transition">
+                      Upload file
+                    </div>
                     <Upload />
                   </div>
                 </div>
@@ -197,11 +200,11 @@ const VideoForegroundPage = () => {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="rounded-none">
+                          <SelectTrigger className="rounded-none border-black">
                             <SelectValue defaultValue={field.value} />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="rounded-none">
+                        <SelectContent className="rounded-none border-black">
                           {maskOptions.map((option) => (
                             <SelectItem
                               key={option.value}
@@ -231,7 +234,7 @@ const VideoForegroundPage = () => {
             <Form {...fileForm}>
               <form
                 onSubmit={form.handleSubmit(onSubmitFile)}
-                className="flex flex-col border w-full p-4 px-3 md:px-6 focus-within:shadow-sm gap-2"
+                className="flex flex-col  w-full p-4 px-3 md:px-6  gap-2"
               >
                 <div className="flex justify-between items-center gap-x-2">
                   <FormField
@@ -241,7 +244,7 @@ const VideoForegroundPage = () => {
                       <FormItem className="w-full">
                         <FormControl>
                           <Input
-                            className="flex items-center border border-dashed outline-none focus-visible ring-0 focus-visible:ring-transparent bg-black/5 focus:border-black rounded-none"
+                            className="flex items-center border border-dashed outline-none focus-visible ring-0 focus-visible:ring-transparent bg-black/5 rounded-none file:bg-black file:text-white"
                             disabled={isLoading}
                             type="file"
                             accept=".mp4"
@@ -258,7 +261,7 @@ const VideoForegroundPage = () => {
 
                   <div
                     onClick={() => setShowUpload(false)}
-                    className="flex items-center justify-center w-8 h-8 hover:bg-black hover:text-white transition hover:cursor-pointer"
+                    className="flex items-center justify-center w-8 h-8 transition hover:cursor-pointer text-muted-foreground hover:text-black"
                   >
                     <X />
                   </div>
@@ -275,11 +278,11 @@ const VideoForegroundPage = () => {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="rounded-none">
+                          <SelectTrigger className="rounded-none border-black">
                             <SelectValue defaultValue={field.value} />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="rounded-none">
+                        <SelectContent className="rounded-none border-black">
                           {maskOptions.map((option) => (
                             <SelectItem
                               key={option.value}
@@ -306,12 +309,7 @@ const VideoForegroundPage = () => {
           )}
         </div>
         <div className="space-y-4 mt-4">
-          {/* {isLoading && (
-            <div className="p-8 w-full flex items-center justify-center bg-muted rounded-lg">
-            <Loader />
-            </div>
-          )} */}
-          {!outputVideo && !isLoading && <Empty label="No video generated" />}
+          {/* {!outputVideo && !isLoading && <Empty label="No video generated" />} */}
 
           <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-4 justify-center items-center">
             {inputVideo && (
