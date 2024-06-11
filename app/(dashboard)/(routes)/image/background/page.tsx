@@ -30,6 +30,10 @@ import { Empty } from "@/components/empty";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@clerk/nextjs";
 import { v4 as uuidv4 } from "uuid";
+import {
+  ReactCompareSlider,
+  ReactCompareSliderImage,
+} from "react-compare-slider";
 
 const RemoveBackgroundPage = () => {
   const { userId, getToken } = useAuth();
@@ -130,26 +134,73 @@ const RemoveBackgroundPage = () => {
         bgColor="bg-pink-600/10"
       />
       <div className="px-4 lg:px-8">
-        {!isLoading && !outputImage && (
-          <div className="grid grid-cols-2 lg:grid-cols-12 gap-2 my-4">
-            <div className="relative aspect-square col-span-6 xl:col-span-4">
-              <Image
-                alt="Sample image"
-                fill
-                src="/image-background.jpg"
-                className="object-cover"
+        <div className="flex justify-center w-full mb-12">
+          {!inputImage && !outputImage && (
+            <div className="max-w-xl">
+              <ReactCompareSlider
+                itemOne={
+                  <ReactCompareSliderImage src="/image-background.jpg" />
+                }
+                itemTwo={
+                  <div className="bg-muted">
+                    <ReactCompareSliderImage src="/image-background-removed.png" />
+                  </div>
+                }
               />
             </div>
-            <div className="relative aspect-square bg-muted col-span-6 xl:col-span-4">
-              <Image
-                alt="Sample image"
-                fill
-                src="/image-background-removed.png"
-                className="object-cover"
-              />
+          )}
+
+          {!outputImage && isLoading && (
+            <div className="flex flex-col gap-y-4 items-center justify-center aspect-video w-full p-8 bg-muted">
+              <div className="w-10 h-10 relative animate-spin">
+                <Image alt="Logo" fill src="/logo.png" />
+              </div>
+              <div className="text-center">
+                <p>Working on your image</p>
+                <p className="text-sm text-muted-foreground">
+                  Might take a minute if this is your first image
+                </p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {inputImage && outputImage && (
+            <div className="max-w-4xl">
+              <ReactCompareSlider
+                itemOne={
+                  <ReactCompareSliderImage src={inputImage} alt="Input image" />
+                }
+                itemTwo={
+                  <div className="bg-muted">
+                    <ReactCompareSliderImage
+                      src={outputImage}
+                      alt="Output image"
+                    />
+                  </div>
+                }
+              />
+              <div className="w-xl mt-4">
+                <Button
+                  onClick={() => window.open(outputImage)}
+                  variant="secondary"
+                  className="w-full"
+                >
+                  <DownloadIcon className="h-4 w-4 mr-2" />
+                  Download
+                </Button>
+                {/* <Button
+                    className="w-full hover:bg-black hover:text-white"
+                    variant="outline"
+                    onClick={resetForm}
+                    disabled={isLoading}
+                  >
+                    Reset
+                  </Button> */}
+              </div>
+            </div>
+          )}
+        </div>
+
         <div className="border border-black">
           {!showUpload && (
             <Form {...form}>
@@ -240,7 +291,7 @@ const RemoveBackgroundPage = () => {
             </Form>
           )}
         </div>
-        <div className="space-y-4 mt-4">
+        {/* <div className="space-y-4 mt-4">
           <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-4 justify-center items-center">
             {inputImage && (
               <div className="relative aspect-square rounded-lg">
@@ -298,7 +349,7 @@ const RemoveBackgroundPage = () => {
               </Card>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -80,13 +80,34 @@ export const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
           <h1 className="text-2xl font-bold font-title">Egghead</h1>
         </Link>
         <div className="space-y-1 overflow-none">
-          {routes.map((route) => (
+          {routes.map((route) => {
+            let style;
+            if (pathname.includes(route.href)) {
+              style = "text-black bg-muted";
+            } else style = "text-zinc-400";
+            return (
+              <Link
+                href={route.href}
+                key={route.href}
+                className={cn(
+                  "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer transition overflow-none",
+                  style
+                )}
+              >
+                <div className="flex items-center flex-1">
+                  <route.icon className={cn("h-5 w-5 mr-2", route.color)} />
+                  {route.label}
+                </div>
+              </Link>
+            );
+          })}
+          {/* {routes.map((route) => (
             <Link
               href={route.href}
               key={route.href}
               className={cn(
                 "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer transition overflow-none",
-                pathname === route.href ? "font-title" : "text-zinc-400"
+                pathname === route.href ? "text-black" : "text-zinc-400"
               )}
             >
               <div className="flex items-center flex-1">
@@ -94,7 +115,7 @@ export const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
                 {route.label}
               </div>
             </Link>
-          ))}
+          ))} */}
         </div>
       </div>
       {/* <FreeCounter apiLimitCount={apiLimitCount} isPro={isPro} /> */}

@@ -28,6 +28,10 @@ import { v4 as uuidv4 } from "uuid";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardFooter } from "@/components/ui/card";
+import {
+  ReactCompareSlider,
+  ReactCompareSliderImage,
+} from "react-compare-slider";
 
 const UpscaleImagePage = () => {
   const { userId, getToken } = useAuth();
@@ -107,6 +111,10 @@ const UpscaleImagePage = () => {
 
         const response = await axios.post("/api/image/upscale", inputValues);
         setOutputImage(response.data);
+        console.log(outputImage);
+        if (outputImage === null) {
+          toast.error("Something went wrong");
+        }
 
         form.reset();
       }
@@ -140,27 +148,61 @@ const UpscaleImagePage = () => {
         bgColor="bg-pink-600/10"
       />
       <div className="px-4 lg:px-8">
-        {!inputImage && !outputImage && (
-          <div className="grid grid-cols-2 lg:grid-cols-12 gap-2 my-4">
-            <div className="relative aspect-square col-span-6 xl:col-span-4">
-              <Image
-                alt="Sample image"
-                fill
-                src="/image-upscale-input.png"
-                className="object-cover"
+        <div className="flex justify-center w-full mb-12">
+          {!inputImage && !outputImage && (
+            <div className="max-w-xl">
+              <ReactCompareSlider
+                itemOne={
+                  <ReactCompareSliderImage src="/image-upscale-input.png" />
+                }
+                itemTwo={
+                  <ReactCompareSliderImage src="/image-upscale-output.png" />
+                }
               />
             </div>
+          )}
 
-            <div className="relative aspect-square col-span-6 xl:col-span-4 bg-muted">
-              <Image
-                alt="Sample image"
-                fill
-                src="/image-upscale-output.png"
-                className="object-cover"
-              />
+          {!outputImage && isLoading && (
+            <div className="h-full flex flex-col gap-y-4 items-center justify-center bg-muted rounded-lg">
+              <div className="w-10 h-10 relative animate-spin">
+                <Image alt="Logo" fill src="/logo.png" />
+              </div>
+              <div className="text-center">
+                <p>Working on your image</p>
+                <p className="text-sm text-muted-foreground">
+                  Might take a minute if this is your first image
+                </p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {inputImage && outputImage && (
+            <div className="max-w-4xl">
+              <ReactCompareSlider
+                itemOne={<ReactCompareSliderImage src={inputImage} />}
+                itemTwo={<ReactCompareSliderImage src={outputImage} />}
+              />
+              <div className="w-xl mt-4">
+                <Button
+                  onClick={() => window.open(outputImage)}
+                  variant="secondary"
+                  className="w-full"
+                >
+                  <DownloadIcon className="h-4 w-4 mr-2" />
+                  Download
+                </Button>
+                {/* <Button
+                    className="w-full hover:bg-black hover:text-white"
+                    variant="outline"
+                    onClick={resetForm}
+                    disabled={isLoading}
+                  >
+                    Reset
+                  </Button> */}
+              </div>
+            </div>
+          )}
+        </div>
         <div className="border border-black">
           {!showUpload && (
             <Form {...form}>
@@ -315,8 +357,8 @@ const UpscaleImagePage = () => {
             </Form>
           )}
         </div>
-        <div className="space-y-4 mt-4">
-          <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-4 justify-center items-center">
+        {/* <div className="space-y-4 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-center items-start">
             {inputImage && (
               <div className="relative aspect-square rounded-lg">
                 <Image
@@ -342,7 +384,7 @@ const UpscaleImagePage = () => {
               </div>
             )}
             {outputImage && (
-              <Card key={outputImage} className="rounded-lg overflow-hidden">
+              <Card key={outputImage} className="rounded-none overflow-hidden">
                 <div className="relative aspect-square">
                   <Image
                     alt="Image"
@@ -364,19 +406,7 @@ const UpscaleImagePage = () => {
               </Card>
             )}
           </div>
-          <div className="w-full pb-12">
-            {inputImage && outputImage && (
-              <Button
-                className="col-span-12 lg:col-span-4"
-                variant="outline"
-                onClick={resetForm}
-                disabled={isLoading}
-              >
-                Reset
-              </Button>
-            )}
-          </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
