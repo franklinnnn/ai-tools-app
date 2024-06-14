@@ -2,7 +2,7 @@ import { Book, Captions, Code, Eraser, ImageIcon, Languages, MessageSquare, Pick
 
 export const tools = [
     {
-      name: "Chatbot",
+      name: "Conversations",
       title: "Chat Away, Anytime",
       description: "Here to make your life easier, day or night.",
       features: [

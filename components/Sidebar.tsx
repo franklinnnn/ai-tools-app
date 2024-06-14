@@ -90,7 +90,7 @@ export const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
                 href={route.href}
                 key={route.href}
                 className={cn(
-                  "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer transition overflow-none",
+                  "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer transition overflow-none hover:text-black",
                   style
                 )}
               >

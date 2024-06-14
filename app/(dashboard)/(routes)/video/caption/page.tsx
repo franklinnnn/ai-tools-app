@@ -395,14 +395,14 @@ const VideoCaptionPage = () => {
                 <Button
                   onClick={resetForm}
                   variant="secondary"
-                  className="col-span-6 lg:col-span-1"
+                  className="col-span-6 lg:col-span-3"
                   type="reset"
                   disabled={isLoading}
                 >
                   Reset
                 </Button>
                 <Button
-                  className="col-span-6 lg:col-span-1"
+                  className="col-span-6 lg:col-span-3"
                   type="submit"
                   disabled={isLoading}
                 >

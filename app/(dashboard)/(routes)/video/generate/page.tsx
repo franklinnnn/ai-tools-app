@@ -66,20 +66,40 @@ const VideoPage = () => {
         bgColor="bg-orange-600/10"
       />
       <div className="px-4 lg:px-8">
-        <video
-          className="w-full aspect-video my-8  border bg-black"
-          controls
-          autoPlay
-          loop
-          muted
-        >
-          <source src="/video-generate.mp4" />
-        </video>
+        <div className="flex justify-center w-full mb-4">
+          {!video && !isLoading && (
+            <video
+              className="w-full md:max-w-3xl lg:max-w-5xl aspect-video border bg-black"
+              controls
+              autoPlay
+              loop
+              muted
+            >
+              <source src="/video-generate.mp4" />
+            </video>
+          )}
+          {isLoading && (
+            <div className="p-8 w-full md:max-w-3xl lg:max-w-5xl aspect-video flex items-center justify-center rounded-lg">
+              <Loader />
+            </div>
+          )}
+          {video && (
+            <video
+              className="w-full md:max-w-3xl lg:max-w-5xl aspect-video border bg-black"
+              controls
+              autoPlay
+              loop
+              muted
+            >
+              <source src={video} />
+            </video>
+          )}
+        </div>
         <div className="border border-black">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className=" w-full p-4 px-3 md:px-6 grid grid-cols-12 gap-2 transition"
+              className="w-full p-4 px-3 md:px-6 grid grid-cols-12 gap-2 transition"
             >
               <FormField
                 name="prompt"
@@ -107,20 +127,20 @@ const VideoPage = () => {
           </Form>
         </div>
         <div className="space-y-4 mt-4">
-          {isLoading && (
+          {/* {isLoading && (
             <div className="p-8 w-full flex items-center justify-center bg-muted rounded-lg">
               <Loader />
             </div>
-          )}
+          )} */}
           {/* {!video && !isLoading && <Empty label="No video generated" />} */}
-          {video && (
+          {/* {video && (
             <video
               className="w-full aspect-video mt-8 rounded-lg border bg-black"
               controls
             >
               <source src={video} />
             </video>
-          )}
+          )} */}
         </div>
       </div>
     </div>

@@ -13,7 +13,13 @@ import { formSchema, fileSchema, maskOptions } from "./constants";
 
 import { useProModal } from "@/hooks/useProModal";
 
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/heading";
@@ -34,6 +40,7 @@ const VideoForegroundPage = () => {
   const proModal = useProModal();
   const router = useRouter();
 
+  const [message, setMessage] = useState<string>();
   const [showUpload, setShowUpload] = useState(false);
   const [inputVideo, setInputVideo] = useState<string>();
   const [outputVideo, setOutputVideo] = useState<string>();
@@ -41,7 +48,7 @@ const VideoForegroundPage = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      url: "",
+      url: undefined,
       mask: "green-screen",
     },
   });
@@ -53,12 +60,13 @@ const VideoForegroundPage = () => {
     },
   });
 
-  const fileRef = fileForm.register("file");
-
   const isLoading =
     form.formState.isSubmitting || fileForm.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!values.url || values.url === "") {
+      setMessage("URL is required");
+    }
     try {
       setInputVideo(undefined);
       setOutputVideo(undefined);
@@ -84,41 +92,40 @@ const VideoForegroundPage = () => {
 
   const onSubmitFile = async (values: z.infer<typeof fileSchema>) => {
     let file = values.file;
-    console.log(file);
-    // try {
-    //   if (file) {
-    //     setInputVideo(undefined);
-    //     setOutputVideo(undefined);
-    //     setInputVideo(URL.createObjectURL(file));
-    //     const { data: fileUpload } = await supabase.storage
-    //       .from("uploads")
-    //       .upload(`videos/${uuidv4()}.mp4`, file, {
-    //         cacheControl: "3600",
-    //         upsert: false,
-    //       });
+    try {
+      if (file) {
+        setInputVideo(undefined);
+        setOutputVideo(undefined);
+        setInputVideo(URL.createObjectURL(file));
+        const { data: fileUpload } = await supabase.storage
+          .from("uploads")
+          .upload(`videos/${uuidv4()}.mp4`, file, {
+            cacheControl: "3600",
+            upsert: false,
+          });
 
-    //     const inputVideoUrl = `https://udmmamkjicrltdpdtcrt.supabase.co/storage/v1/object/public/uploads/${fileUpload?.path}`;
+        const inputVideoUrl = `https://udmmamkjicrltdpdtcrt.supabase.co/storage/v1/object/public/uploads/${fileUpload?.path}`;
 
-    //     const inputValues = {
-    //       url: inputVideoUrl,
-    //       mask: values.mask,
-    //     };
+        const inputValues = {
+          url: inputVideoUrl,
+          mask: values.mask,
+        };
 
-    //     const response = await axios.post("/api/video/foreground", inputValues);
+        const response = await axios.post("/api/video/foreground", inputValues);
 
-    //     setOutputVideo(response.data);
+        setOutputVideo(response.data);
 
-    //     form.reset();
-    //   }
-    // } catch (error: any) {
-    //   if (error?.response?.status === 403) {
-    //     proModal.onOpen();
-    //   } else {
-    //     toast.error("Something went wrong");
-    //   }
-    // } finally {
-    //   router.refresh();
-    // }
+        form.reset();
+      }
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      router.refresh();
+    }
   };
 
   return (
@@ -131,26 +138,64 @@ const VideoForegroundPage = () => {
         bgColor="bg-orange-600/10"
       />
       <div className="px-4 lg:px-8">
-        {!isLoading && !outputVideo && (
-          <div className="grid grid-cols-4 items-center gap-2 my-4">
-            <video
-              className="aspect-video col-span-2 object-cover"
-              autoPlay
-              muted
-              loop
-            >
-              <source src="/video-foreground.mp4" />
-            </video>
-            <div className="flex rounded-lg">
-              <video className="aspect-square object-cover" autoPlay muted loop>
-                <source src="/video-foreground-green-screen.mp4" />
+        <div className="flex justify-center w-full mb-4">
+          {!isLoading && !outputVideo && (
+            <div className="grid grid-cols-4 items-center gap-2 my-4">
+              <video
+                className="aspect-video col-span-2 object-cover"
+                autoPlay
+                muted
+                loop
+              >
+                <source src="/video-foreground.mp4" />
               </video>
-              <video className="aspect-square object-cover" autoPlay muted loop>
-                <source src="/video-foreground-alpha-mask.mp4" />
-              </video>
+              <div className="flex rounded-lg">
+                <video
+                  className="aspect-square object-cover"
+                  autoPlay
+                  muted
+                  loop
+                >
+                  <source src="/video-foreground-green-screen.mp4" />
+                </video>
+                <video
+                  className="aspect-square object-cover"
+                  autoPlay
+                  muted
+                  loop
+                >
+                  <source src="/video-foreground-alpha-mask.mp4" />
+                </video>
+                W
+              </div>
             </div>
-          </div>
-        )}
+          )}
+          {!outputVideo && isLoading && (
+            <div className="h-full flex flex-col gap-y-4 items-center justify-center bg-muted rounded-lg">
+              <div className="w-10 h-10 relative animate-spin">
+                <Image alt="Logo" fill src="/logo.png" />
+              </div>
+              <div className="text-center">
+                <p>Working on your video</p>
+                <p className="text-sm text-muted-foreground">
+                  Might take a minute if this is your first video
+                </p>
+              </div>
+            </div>
+          )}
+
+          {outputVideo && (
+            <video
+              className="w-full md:max-w-3xl lg:max-w-5xl aspect-video border bg-muted"
+              controls
+              autoPlay
+              loop
+              muted
+            >
+              <source src={outputVideo} />
+            </video>
+          )}
+        </div>
         <div className="border border-black">
           {!showUpload && (
             <Form {...form}>
@@ -173,6 +218,9 @@ const VideoForegroundPage = () => {
                               {...field}
                             />
                           </FormControl>
+                          <FormLabel className="text-xs text-red-500">
+                            {message ? message : null}
+                          </FormLabel>
                         </FormItem>
                       )}
                     />
@@ -233,7 +281,7 @@ const VideoForegroundPage = () => {
           {showUpload && (
             <Form {...fileForm}>
               <form
-                onSubmit={form.handleSubmit(onSubmitFile)}
+                onSubmit={fileForm.handleSubmit(onSubmitFile)}
                 className="flex flex-col  w-full p-4 px-3 md:px-6  gap-2"
               >
                 <div className="flex justify-between items-center gap-x-2">
@@ -311,7 +359,7 @@ const VideoForegroundPage = () => {
         <div className="space-y-4 mt-4">
           {/* {!outputVideo && !isLoading && <Empty label="No video generated" />} */}
 
-          <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-4 justify-center items-center">
+          {/* <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-4 justify-center items-center">
             {inputVideo && (
               <video
                 className="w-full aspect-video mt-8 rounded-lg"
@@ -345,7 +393,7 @@ const VideoForegroundPage = () => {
                 <source src={outputVideo} />
               </video>
             )}
-          </div>
+          </div> */}
           {/* <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-4">
             <video
               className="w-full aspect-video mt-8 rounded-lg"
