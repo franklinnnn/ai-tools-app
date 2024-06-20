@@ -166,7 +166,6 @@ const VideoForegroundPage = () => {
                 >
                   <source src="/video-foreground-alpha-mask.mp4" />
                 </video>
-                W
               </div>
             </div>
           )}

@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs' 
 import supabase from "@/lib/supabaseClient";
-import { MAX_FREE_COUNTS } from '@/constants';
+import { MAX_FREE_COUNTS, TIMEZONE_OFFSET } from '@/constants';
 
 export const increaseApiLimit = async () => {
     const {userId} = auth();
@@ -39,13 +39,14 @@ export const checkApiLimit = async () => {
         return false;
     }
 
-    const { data: userApiLimit, error } = await supabase
+    const { data: userApiLimit } = await supabase
       .from("user-api-limit")
       .select("*")
       .eq("user_id", userId)
       .single()
 
     // const userApiLimit = data?.find((user) => user.user_id === userId);
+    
 
     if(!userApiLimit || userApiLimit.count < MAX_FREE_COUNTS) {
       return true
@@ -62,7 +63,7 @@ export const getApiLimitCount = async () => {
     return 0;
   }
 
-  const { data: userApiLimit, error} = await supabase
+  const { data: userApiLimit } = await supabase
     .from('user-api-limit')
     .select("*")
     .eq("user_id", userId)

@@ -51,7 +51,7 @@ const VideoCaptionPage = () => {
       // output_transcript: true,
       subs_position: "center",
       color: "white",
-      highlight_color: "red",
+      highlight_color: "orange",
       // font_size: 7,
       // max_chars: 20,
       // opacity: 0,
@@ -168,7 +168,7 @@ const VideoCaptionPage = () => {
         iconColor="text-orange-600"
         bgColor="bg-orange-600/10"
       />
-      <div className="px-4 lg:px-8">
+      <div className="px-4 lg:px-8 pb-12">
         <div className="w-full flex items-center justify-center my-8">
           {!outputVideo && !isLoading && (
             <div className="flex flex-col md:flex-row gap-2">
@@ -194,20 +194,21 @@ const VideoCaptionPage = () => {
           )}
 
           {!outputVideo && isLoading && (
-            <div className="h-full flex flex-col gap-y-4 p-4 items-center justify-center  rounded-lg">
+            <div className="h-full flex flex-col gap-y-4 items-center justify-center bg-muted rounded-lg">
               <div className="w-10 h-10 relative animate-spin">
                 <Image alt="Logo" fill src="/logo.png" />
               </div>
               <div className="text-center">
                 <p>Working on your video</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Might take a minute if this is your first video
                 </p>
               </div>
             </div>
           )}
+
           {outputVideo && (
-            <Card key={outputVideo} className="overflow-hidden">
+            <Card key={outputVideo} className="overflow-hidden rounded-none">
               <video className="aspect-auto" autoPlay controls muted loop>
                 <source src={outputVideo} />
               </video>
@@ -217,7 +218,7 @@ const VideoCaptionPage = () => {
                   variant="secondary"
                   className="w-full"
                 >
-                  <DownloadIcon className="h-4 w-2 mr-2" />
+                  <DownloadIcon className="h-4 w-4 mr-2" />
                   Transcript
                 </Button>
               </CardFooter>
@@ -394,7 +395,7 @@ const VideoCaptionPage = () => {
               <div className="grid grid-cols-12 mt-4 gap-x-4">
                 <Button
                   onClick={resetForm}
-                  variant="secondary"
+                  variant="outline"
                   className="col-span-6 lg:col-span-3"
                   type="reset"
                   disabled={isLoading}

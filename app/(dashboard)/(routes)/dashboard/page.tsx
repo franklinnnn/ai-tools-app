@@ -29,8 +29,8 @@ const tools = [
   {
     label: "Video Tools",
     icon: Video,
-    color: "text-orange-500",
-    bgColor: "bg-orange-500/10",
+    color: "text-violet-500",
+    bgColor: "bg-violet-500/10",
     href: "/video",
   },
   // {

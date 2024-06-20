@@ -16,7 +16,7 @@ export const LandingHero = () => {
         <h1>Create content faster with AI.</h1>
         <div className="flex gap-x-2 text-2xl font-body uppercase">
           <div>Using The Best Tools for</div>
-          <div className="text-transparent font-extrabold bg-clip-text bg-gradient-to-r from-pink-500 to-orange-400">
+          <div className="text-transparent font-extrabold bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-400">
             <TypewriterComponent
               options={{
                 strings: ["conversations.", "images.", "videos."],
@@ -33,7 +33,7 @@ export const LandingHero = () => {
         </div>
       </div>
       <div className="absolute aspect-square md:w-1/2 h-min-72 top-0 right-12 opacity-95">
-        <Image src="/hero.jpg" alt="hero image" fill />
+        <Image src="/hero2.jpg" alt="hero image" fill />
       </div>
     </div>
   );

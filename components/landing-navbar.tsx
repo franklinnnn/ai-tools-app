@@ -19,14 +19,14 @@ export const LandingNavbar = () => {
   return (
     <nav className="p-4 bg-transparent flex items-center justify-between">
       <Link href="/" className="flex items-center">
-        <div className="relative h-8 w-8 mr-4">
+        <div className="relative h-8 w-8 mr-1">
           <Image fill alt="logo" src="/logo.png" />
         </div>
 
         {/* <h1 className={cn("text-2xl font-bold text-black", font.className)}>
           Egghead
         </h1> */}
-        <h1 className="font-title font-bold text-black text-2xl">Egghead</h1>
+        <h1 className="font-title font-bold text-2xl">Egghead</h1>
       </Link>
 
       <div className="flex items-center gap-x-6 font-body uppercase">

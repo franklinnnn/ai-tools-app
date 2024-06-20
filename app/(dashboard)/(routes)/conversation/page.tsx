@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 import axios from "axios";
@@ -26,6 +26,7 @@ import { BotAvatar } from "@/components/bot-avatar";
 const ConversationPage = () => {
   const proModal = useProModal();
   const router = useRouter();
+  const formRef = useRef<HTMLInputElement | null>(null);
 
   const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -34,6 +35,8 @@ const ConversationPage = () => {
       prompt: "",
     },
   });
+
+  // console.log(messages.sort((a, b) => (a > b ? -1 : 1)));
 
   const isLoading = form.formState.isSubmitting;
 
@@ -53,6 +56,7 @@ const ConversationPage = () => {
       setMessages((current) => [...current, userMessage, response.data]);
 
       form.reset();
+      formRef.current?.scrollIntoView();
     } catch (error: any) {
       if (error?.response?.status === 403) {
         proModal.onOpen();
@@ -73,8 +77,55 @@ const ConversationPage = () => {
         iconColor="text-fuchsia-600"
         bgColor="bg-fuchsia-600/10"
       />
-      <div className="px-4 lg:px-8">
-        <div className="border border-black">
+      <div className="relative flex-col-reverse px-4 lg:px-8 pb-12">
+        <div className="space-y-4 mb-4 pb-4">
+          <div className="flex flex-col gap-y-2 font-body">
+            {messages
+              .sort((a, b) => (a > b ? -1 : 1))
+              .map((message) => (
+                <div
+                  key={String(message.content)}
+                  className={cn(
+                    "p-8 w-full flex items-start gap-x-8",
+                    message.role === "user"
+                      ? "bg-white border border-black/10"
+                      : "bg-muted"
+                  )}
+                >
+                  {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+                  {/* <p className="text-sm">{String(message.content)}</p> */}
+
+                  <ReactMarkdown
+                    components={{
+                      pre: ({ node, ...props }) => (
+                        <div className="overflow-auto w-full my-2 bg-slate-200/50 p-2 ">
+                          <pre {...props} />
+                        </div>
+                      ),
+                      code: ({ node, ...props }) => (
+                        <code className="bg-slate-200/50 p-1" {...props} />
+                      ),
+                    }}
+                    className="text-sm overflow-hidden leading-7"
+                  >
+                    {String(message.content || "")}
+                  </ReactMarkdown>
+                </div>
+              ))}
+          </div>
+          {isLoading && (
+            <div className="p-8 w-full flex items-center justify-center bg-muted rounded-lg">
+              <Loader />
+            </div>
+          )}
+          {/* {messages.length === 0 && !isLoading && (
+            <Empty label="No conversation started" />
+          )} */}
+        </div>
+        <div
+          className="sticky bottom-4 bg-white border border-black"
+          ref={formRef}
+        >
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -105,7 +156,7 @@ const ConversationPage = () => {
             </form>
           </Form>
         </div>
-        <div className="space-y-4 mt-4">
+        {/* <div className="space-y-4 mt-4">
           {isLoading && (
             <div className="p-8 w-full flex items-center justify-center bg-muted rounded-lg">
               <Loader />
@@ -114,39 +165,40 @@ const ConversationPage = () => {
           {messages.length === 0 && !isLoading && (
             <Empty label="No conversation started" />
           )}
-          <div className="flex flex-col-reverse gap-y-2 font-body">
-            {messages.map((message) => (
-              <div
-                key={String(message.content)}
-                className={cn(
-                  "p-8 w-full flex items-start gap-x-8",
-                  message.role === "user"
-                    ? "bg-white border border-black/10"
-                    : "bg-black text-white"
-                )}
-              >
-                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                {/* <p className="text-sm">{String(message.content)}</p> */}
-
-                <ReactMarkdown
-                  components={{
-                    pre: ({ node, ...props }) => (
-                      <div className="overflow-auto w-full my-2 bg-zinc-800 p-2 ">
-                        <pre {...props} />
-                      </div>
-                    ),
-                    code: ({ node, ...props }) => (
-                      <code className="bg-zinc-800 p-1" {...props} />
-                    ),
-                  }}
-                  className="text-sm overflow-hidden leading-7"
+          <div className="flex flex-col gap-y-2 font-body">
+            {messages
+              .sort((a, b) => (a > b ? -1 : 1))
+              .map((message) => (
+                <div
+                  key={String(message.content)}
+                  className={cn(
+                    "p-8 w-full flex items-start gap-x-8",
+                    message.role === "user"
+                      ? "bg-white border border-black/10"
+                      : "bg-black text-white"
+                  )}
                 >
-                  {String(message.content || "")}
-                </ReactMarkdown>
-              </div>
-            ))}
+                  {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+
+                  <ReactMarkdown
+                    components={{
+                      pre: ({ node, ...props }) => (
+                        <div className="overflow-auto w-full my-2 bg-zinc-800 p-2 ">
+                          <pre {...props} />
+                        </div>
+                      ),
+                      code: ({ node, ...props }) => (
+                        <code className="bg-zinc-800 p-1" {...props} />
+                      ),
+                    }}
+                    className="text-sm overflow-hidden leading-7"
+                  >
+                    {String(message.content || "")}
+                  </ReactMarkdown>
+                </div>
+              ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

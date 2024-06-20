@@ -22,7 +22,7 @@ const routes = [
     label: "Dashboard",
     icon: LayoutDashboard,
     href: "/dashboard",
-    color: "text-violet-600",
+    color: "text-orange-600",
   },
   {
     label: "Conversation",
@@ -40,7 +40,7 @@ const routes = [
     label: "Video",
     icon: Video,
     href: "/video",
-    color: "text-orange-600",
+    color: "text-violet-600",
   },
   // {
   //   label: "Music Generation",
