@@ -77,8 +77,9 @@ const ConversationPage = () => {
         iconColor="text-fuchsia-600"
         bgColor="bg-fuchsia-600/10"
       />
-      <div className="relative flex-col-reverse px-4 lg:px-8 pb-12">
-        <div className="space-y-4 mb-4 pb-4">
+
+      <div className="flex flex-col h-full px-4 lg:px-8">
+        <div className="space-y-4 mb-4 pb-4 overflow-y-auto">
           <div className="flex flex-col gap-y-2 font-body">
             {messages
               .sort((a, b) => (a > b ? -1 : 1))
@@ -94,7 +95,6 @@ const ConversationPage = () => {
                 >
                   {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
                   {/* <p className="text-sm">{String(message.content)}</p> */}
-
                   <ReactMarkdown
                     components={{
                       pre: ({ node, ...props }) => (
@@ -119,86 +119,86 @@ const ConversationPage = () => {
             </div>
           )}
           {/* {messages.length === 0 && !isLoading && (
-            <Empty label="No conversation started" />
-          )} */}
+              <Empty label="No conversation started" />
+            )} */}
         </div>
-        <div
-          className="sticky bottom-4 bg-white border border-black"
-          ref={formRef}
-        >
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className=" w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
-            >
-              <FormField
-                name="prompt"
-                render={({ field }) => (
-                  <FormItem className="col-span-12 lg:col-span-10">
-                    <FormControl className="m-0 p-0">
-                      <Input
-                        className="border-0 outline-none focus-visible ring-0 focus-visible:ring-transparent"
-                        disabled={isLoading}
-                        placeholder="Chat"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                className="col-span-12 lg:col-span-2 w-full"
-                disabled={isLoading}
+        <div className="sticky bottom-0 right-0 left-0 w-full bg-white py-2">
+          <div
+            className="w-full bg-white border border-black overflow-hidden"
+            ref={formRef}
+          >
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className=" w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
               >
-                Hello
-              </Button>
-            </form>
-          </Form>
+                <FormField
+                  name="prompt"
+                  render={({ field }) => (
+                    <FormItem className="col-span-12 lg:col-span-10">
+                      <FormControl className="m-0 p-0">
+                        <Input
+                          className="border-0 outline-none focus-visible ring-0 focus-visible:ring-transparent"
+                          disabled={isLoading}
+                          placeholder="Chat"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  className="col-span-12 lg:col-span-2 w-full"
+                  disabled={isLoading}
+                >
+                  Hello
+                </Button>
+              </form>
+            </Form>
+          </div>
         </div>
         {/* <div className="space-y-4 mt-4">
-          {isLoading && (
-            <div className="p-8 w-full flex items-center justify-center bg-muted rounded-lg">
-              <Loader />
-            </div>
-          )}
-          {messages.length === 0 && !isLoading && (
-            <Empty label="No conversation started" />
-          )}
-          <div className="flex flex-col gap-y-2 font-body">
-            {messages
-              .sort((a, b) => (a > b ? -1 : 1))
-              .map((message) => (
-                <div
-                  key={String(message.content)}
-                  className={cn(
-                    "p-8 w-full flex items-start gap-x-8",
-                    message.role === "user"
-                      ? "bg-white border border-black/10"
-                      : "bg-black text-white"
-                  )}
-                >
-                  {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-
-                  <ReactMarkdown
-                    components={{
-                      pre: ({ node, ...props }) => (
-                        <div className="overflow-auto w-full my-2 bg-zinc-800 p-2 ">
-                          <pre {...props} />
-                        </div>
-                      ),
-                      code: ({ node, ...props }) => (
-                        <code className="bg-zinc-800 p-1" {...props} />
-                      ),
-                    }}
-                    className="text-sm overflow-hidden leading-7"
+            {isLoading && (
+              <div className="p-8 w-full flex items-center justify-center bg-muted rounded-lg">
+                <Loader />
+              </div>
+            )}
+            {messages.length === 0 && !isLoading && (
+              <Empty label="No conversation started" />
+            )}
+            <div className="flex flex-col gap-y-2 font-body">
+              {messages
+                .sort((a, b) => (a > b ? -1 : 1))
+                .map((message) => (
+                  <div
+                    key={String(message.content)}
+                    className={cn(
+                      "p-8 w-full flex items-start gap-x-8",
+                      message.role === "user"
+                        ? "bg-white border border-black/10"
+                        : "bg-black text-white"
+                    )}
                   >
-                    {String(message.content || "")}
-                  </ReactMarkdown>
-                </div>
-              ))}
-          </div>
-        </div> */}
+                    {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+                    <ReactMarkdown
+                      components={{
+                        pre: ({ node, ...props }) => (
+                          <div className="overflow-auto w-full my-2 bg-zinc-800 p-2 ">
+                            <pre {...props} />
+                          </div>
+                        ),
+                        code: ({ node, ...props }) => (
+                          <code className="bg-zinc-800 p-1" {...props} />
+                        ),
+                      }}
+                      className="text-sm overflow-hidden leading-7"
+                    >
+                      {String(message.content || "")}
+                    </ReactMarkdown>
+                  </div>
+                ))}
+            </div>
+          </div> */}
       </div>
     </div>
   );
