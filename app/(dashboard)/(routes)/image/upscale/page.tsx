@@ -163,7 +163,7 @@ const UpscaleImagePage = () => {
           )}
 
           {!outputImage && isLoading && (
-            <div className="h-full flex flex-col gap-y-4 items-center justify-center bg-muted rounded-lg">
+            <div className="h-full flex flex-col gap-y-4 items-center justify-center">
               <div className="w-10 h-10 relative animate-spin">
                 <Image alt="Logo" fill src="/logo.png" />
               </div>
