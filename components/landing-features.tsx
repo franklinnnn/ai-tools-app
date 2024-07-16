@@ -5,6 +5,10 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
 import { tools } from "@/app/(landing)/constants";
+import {
+  ReactCompareSlider,
+  ReactCompareSliderImage,
+} from "react-compare-slider";
 
 export const LandingFeatures = () => {
   const { isSignedIn } = useAuth();
@@ -47,7 +51,7 @@ export const LandingFeatures = () => {
           key={tools[activeFeature].description}
           className="flex font-title text-2xl border border-black text-white"
         >
-          <div className="flex flex-col justify-center bg-black aspect-video w-1/2 pl-6">
+          <div className="flex flex-col justify-center bg-black w-1/2 pl-6">
             <div className="flex items-center">
               {/* <item.icon className="h-6 w-6 mr-2 text-pink-600" /> */}
               <h2>{tools[activeFeature].title}</h2>
@@ -70,15 +74,15 @@ export const LandingFeatures = () => {
               ))}
             </div>
           </div>
-          <div className="relative aspepct-video w-1/2">
-            <div className="flex items-center min-h-64">
-              <div className="my-12">
-                <Image
-                  src={tools[activeFeature].features[activeTool].media}
-                  alt="media"
-                  fill
-                />
-              </div>
+
+          <div className="relative aspect-video w-1/2">
+            <div className="flex items-center justify-center min-h-64">
+              <Image
+                src={tools[activeFeature].features[activeTool].media}
+                alt="media"
+                fill
+                className="object-contain"
+              />
             </div>
             <Link
               href={

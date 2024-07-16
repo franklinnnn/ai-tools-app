@@ -9,19 +9,19 @@ export const tools = [
         {
           title: "Research topics",
           icon: Book,
-          media: "/logo.png",
+          media: "/landing-conversation-research.png",
           url: "/conversation",
         },
         {
           title: "Translate text quickly",
           icon: Languages,
-          media: "/logo.png",
+          media: "/landing-conversation-translation.png",
           url: "/conversation",
         },
         {
           title: "Write code",
           icon: Code,
-          media: "/empty.png",
+          media: "/landing-conversation-code.png",
           url: "/conversation",
         },
       ],
@@ -41,13 +41,13 @@ export const tools = [
         {
           title: "Remove background from image",
           icon: Eraser,
-          media: "/image-background.jpg",
+          media: "/landing-image-background.png",
           url: "/mage/background",
         },
         {
           title: "Upscale image quality",
           icon: Sparkles,
-          media: "/image-upscale-output.png",
+          media: "/landing-image-upscale.png",
           url: "/image/upscale",
         },
       ],
