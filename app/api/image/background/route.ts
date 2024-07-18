@@ -23,11 +23,14 @@ export async function POST(req: Request) {
     }
       
     const freeTrial = await checkApiLimit();
-    const isPro = await checkSubscription();
+    // const isPro = await checkSubscription();
 
 
-    if(!freeTrial && !isPro) {
-      return new NextResponse('Free trial has expired.', {status: 403})
+    // if(!freeTrial && !isPro) {
+    //   return new NextResponse('Free trial has expired.', {status: 403})
+    // }
+    if(!freeTrial) {
+      return new NextResponse('Daily use limit exceeded', {status:403})
     }
 
     const response = await replicate.run(
@@ -39,9 +42,9 @@ export async function POST(req: Request) {
       }
     );
 
-    if(isPro) {
-      await increaseApiLimit();
-    }
+    // if(isPro) {
+    //   await increaseApiLimit();
+    // }
 
     console.log("BACKGROUND RESPONSE", response)
 

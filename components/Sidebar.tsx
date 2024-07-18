@@ -54,12 +54,12 @@ const routes = [
   //   href: "/code",
   //   color: "text-green-600",
   // },
-  {
-    label: "Settings",
-    icon: Settings,
-    href: "/settings",
-    color: "text-slate-300",
-  },
+  // {
+  //   label: "Settings",
+  //   icon: Settings,
+  //   href: "/settings",
+  //   color: "text-slate-300",
+  // },
 ];
 
 interface SidebarProps {
@@ -101,21 +101,6 @@ export const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
               </Link>
             );
           })}
-          {/* {routes.map((route) => (
-            <Link
-              href={route.href}
-              key={route.href}
-              className={cn(
-                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer transition overflow-none",
-                pathname === route.href ? "text-black" : "text-zinc-400"
-              )}
-            >
-              <div className="flex items-center flex-1">
-                <route.icon className={cn("h-5 w-5 mr-2", route.color)} />
-                {route.label}
-              </div>
-            </Link>
-          ))} */}
         </div>
       </div>
       {/* <FreeCounter apiLimitCount={apiLimitCount} isPro={isPro} /> */}
